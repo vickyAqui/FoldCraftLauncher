@@ -57,6 +57,7 @@ import com.mio.util.hasStringId
 import com.mio.util.pixelAwareIcon
 import com.tungsten.fcl.R
 import com.tungsten.fcl.databinding.ActivityMainBinding
+import com.tungsten.fcl.game.AuroraModpackInstaller
 import com.tungsten.fcl.game.TexturesLoader
 import com.tungsten.fcl.setting.Accounts
 import com.tungsten.fcl.setting.ConfigHolder
@@ -65,6 +66,7 @@ import com.tungsten.fcl.setting.Profile
 import com.tungsten.fcl.setting.Profiles
 import com.tungsten.fcl.ui.UIManager
 import com.tungsten.fcl.ui.download.modpack.LocalModpackPage
+import com.tungsten.fcl.ui.download.modpack.ModpackInstaller
 import com.tungsten.fcl.ui.main.MainUI
 import com.tungsten.fcl.ui.version.VersionListViewModel
 import com.tungsten.fcl.ui.version.Versions
@@ -371,6 +373,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 }
                 setupAccountDisplay()
                 setupVersionDisplay()
+                maybeOfferAuroraInstall()
                 playAnim()
                 // 引导在入场动画播完后弹出；动画时长随 animationSpeed 缩放，最末组延迟 700ms。
                 // 顺序按视觉动线：右侧（账户/版本卡片/启动）→ 左侧菜单自上而下；
@@ -1251,6 +1254,40 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
         mediaPlayer?.let {
             val volume = sharedPreferences.getInt("videoBackgroundVolume", 100) / 100f
             it.setVolume(volume, volume)
+        }
+    }
+
+    private fun maybeOfferAuroraInstall() {
+        if (sharedPreferences.getBoolean("aurora_install_offered", false)) return
+        val profile = Profiles.getSelectedProfile()
+        if (profile.repository.hasVersion(AuroraModpackInstaller.VERSION_NAME)) return
+        binding.uiLayout.postDelayed(1800L) {
+            if (isFinishing || isDestroyed) return@postDelayed
+            sharedPreferences.edit { putBoolean("aurora_install_offered", true) }
+            FCLAlertDialog.Builder(this@MainActivity)
+                .setAlertLevel(FCLAlertDialog.AlertLevel.INFO)
+                .setCancelable(false)
+                .setTitle(getString(R.string.aurora_install_title))
+                .setMessage(getString(R.string.aurora_install_message))
+                .setPositiveButton(getString(R.string.aurora_install_positive)) {
+                    try {
+                        val task = AuroraModpackInstaller.createInstallTask(
+                            profile,
+                            AuroraModpackInstaller.VERSION_NAME
+                        )
+                        ModpackInstaller.installModpack(this@MainActivity, task, false)
+                    } catch (e: Exception) {
+                        FCLAlertDialog.Builder(this@MainActivity)
+                            .setAlertLevel(FCLAlertDialog.AlertLevel.ALERT)
+                            .setMessage(getString(R.string.aurora_install_failed, e.message ?: ""))
+                            .setNegativeButton(getString(R.string.dialog_positive), null)
+                            .create()
+                            .show()
+                    }
+                }
+                .setNegativeButton(getString(R.string.aurora_install_negative), null)
+                .create()
+                .show()
         }
     }
 

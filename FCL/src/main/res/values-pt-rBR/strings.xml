@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="splash_permission_msg">Sem permissão de armazenamento, por favor conceda a permissão ao Fold Craft Launcher.</string>
+    <string name="splash_permission_msg">Sem permissão de armazenamento, por favor conceda a permissão ao Aurora Studios.</string>
     <string name="splash_permission_grant">Grant</string>
     <string name="splash_permission_title">Permission to store needed</string>
     <string name="splash_permission_close">Close the app</string>
@@ -912,4 +912,10 @@
     <string name="renderer_source">Fonte:</string>
     <string name="renderer_source_builtin">Integrado</string>
     <string name="animation_idle">Parado</string>
+
+    <string name="aurora_install_title">Aurora Studios</string>
+    <string name="aurora_install_message">Instalar o modpack oficial da Aurora Studios?\n\nMinecraft 1.20.1 · Forge · 311 mods (~1,5 GB). Use Wi-Fi e mantenha o app aberto até terminar.</string>
+    <string name="aurora_install_positive">Instalar agora</string>
+    <string name="aurora_install_negative">Depois</string>
+    <string name="aurora_install_failed">Não foi possível instalar o modpack Aurora: %1$s</string>
 </resources>
