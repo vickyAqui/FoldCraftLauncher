@@ -1258,12 +1258,10 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
     }
 
     private fun maybeOfferAuroraInstall() {
-        if (sharedPreferences.getBoolean("aurora_install_offered", false)) return
         val profile = Profiles.getSelectedProfile()
         if (profile.repository.hasVersion(AuroraModpackInstaller.VERSION_NAME)) return
         binding.uiLayout.postDelayed(1800L) {
             if (isFinishing || isDestroyed) return@postDelayed
-            sharedPreferences.edit { putBoolean("aurora_install_offered", true) }
             FCLAlertDialog.Builder(this@MainActivity)
                 .setAlertLevel(FCLAlertDialog.AlertLevel.INFO)
                 .setCancelable(false)
