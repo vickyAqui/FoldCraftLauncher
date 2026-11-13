@@ -23,7 +23,7 @@ public final class AuroraModpackInstaller {
 
     public static final String VERSION_NAME = "Aurora Studios";
     public static final String GAME_VERSION = "1.20.1";
-    public static final String FORGE_VERSION = "1.20.1-47.4.10";
+    public static final String FORGE_VERSION = "47.4.10";
     public static final String MANIFEST_URL = "https://github.com/vickyAqui/aurora-launcher/releases/download/modpack/modpack.json";
     public static final String SERVER_ADDRESS = "79.182.128.137:25565";
 
